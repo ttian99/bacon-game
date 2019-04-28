@@ -1,0 +1,36 @@
+{
+  "name": "bacon-game",
+  "version": "0.0.1",
+  "description": "The package template for getting started.",
+  "author": "Monkey Jiao",
+  "private": true,
+  "main": "main.js",
+  "main-menu": {
+    "bacon-game/打开面板": {
+      "message": "bacon-game:open"
+    },
+    "bacon-game/安装依赖包": {
+      "message": "bacon-game:install"
+    },
+    "bacon-game/facebook/拷贝debug工具": {
+      "message": "bacon-game:fb-copy-debug"
+    },
+    "bacon-game/facebook/导入level图片": {
+      "message": "bacon-game:fb-import-level"
+    },
+    "bacon-game/ttgame/拷贝wechat到ttgame文件夹": {
+      "message": "bacon-game:tt-copy-build"
+    }
+  },
+  "panel": {
+    "main": "panel/index.js",
+    "type": "dockable",
+    "title": "bacon-game",
+    "width": 490,
+    "height": 570
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "glob": "^7.1.3"
+  }
+}
