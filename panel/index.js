@@ -1,4 +1,5 @@
 let task = require(Editor.url('packages://bacon-game/lib/task.js'));
+var path = require('path');
 
 // panel/index.js, this filename needs to match the one registered in package.json
 Editor.Panel.extend({
@@ -13,6 +14,38 @@ Editor.Panel.extend({
     <h1>Bacon游戏插件</h1>
     <hr />
     <h2>关卡读取</h2>
+    <section>
+      <ui-prop name="配置表excel路径" tooltip="选择关卡配置文件">
+        <ui-input readonly id="excel_file_input" style="width: 300px"></ui-input>
+        <ui-button id="excel_file_btn" class="green">选择文件</ui-button>
+      </ui-prop>
+      <ui-prop name="导出json目录" tooltip="选择PREFAB.json SORT.json的输出目录">
+        <ui-input id="json_file_input" style="width: 300px"></ui-input>
+        <ui-button id="json_file_btn" class="green">选择目录</ui-button>      
+      </ui-prop>
+      <ui-prop name="选择平台">
+        <ui-select id="platform" value="wx">
+          <option value="wx">微信</option>
+          <option value="tt">头条</option>
+          <option value="fb">facebook</option>
+        </ui-select>
+      </ui-prop>
+      <ui-prop name="选择语言">
+        <ui-select id="language" value="cn">
+          <option value="cn">中文</option>
+          <option value="en">英文</option>
+        </ui-select>
+      </ui-prop>
+      <ui-prop name="原始关卡配置的数量" tooltips="">
+        <ui-num-input id="prefab_count" step="1" placeholder="92" value="92"></ui-num-input>
+      </ui-prop>
+      <ui-prop name="实际关卡配置的数量" tooltips="">
+        <ui-num-input id="sort_count" step="1" placeholder="85" value="85"></ui-num-input>
+      </ui-prop>
+      <div style="margin-top: 20px; margin-bottom: 20px; text-align: center">
+        <ui-button id="export_level_btn" class="yellow">导出</ui-button>
+      </div>
+    </section>
     <hr />
     <h2>facebook小游戏</h2>
     <section>
@@ -48,6 +81,15 @@ Editor.Panel.extend({
     tt_auto_copy: '#tt_auto_copy',
     tt_appid: '#tt_appid',
     tt_save_btn: '#tt_save_btn',
+    excel_file_btn: '#excel_file_btn',
+    excel_file_input: '#excel_file_input',
+    json_file_btn: '#json_file_btn',
+    json_file_input: '#json_file_input',
+    export_level_btn: '#export_level_btn',
+    language: '#language',
+    platform: '#platform',
+    prefab_count: '#prefab_count',
+    sort_count: '#sort_count'
   },
 
   run(data) {
@@ -65,7 +107,45 @@ Editor.Panel.extend({
     });
     this.$tt_save_btn.addEventListener('confirm', () => {
       Editor.info(`appid = ${this.$tt_appid.$input.value} autoCopy = ${this.$tt_auto_copy.checked}`);
+      Editor.info(`this.$import_file = ${this.$import_file.value}`);
     });
+
+    const DEFAULT_EXCEL_PATH = path.join(Editor.Project.path, 'doc/配置表/小猪煎强关卡配置表编排顺序.xlsx');
+    const DEFAULT_JSON_PATH = path.join(Editor.Project.path, 'doc/配置表');
+    this.$excel_file_input.value = DEFAULT_EXCEL_PATH;
+    this.$json_file_input.value = DEFAULT_JSON_PATH;
+    this.$excel_file_btn.addEventListener('confirm', () => {
+      let res = Editor.Dialog.openFile({
+        title: "选择Excel文件",
+        defaultPath: DEFAULT_EXCEL_PATH,
+        properties: ['openFile'],
+      });
+      if (res !== -1) {
+        Editor.info(res);
+        this.$excel_file_input.value = res;
+      }
+    });
+    this.$json_file_btn.addEventListener('confirm', () => {
+      let res = Editor.Dialog.openFile({
+        title: "选择导出Json的目录",
+        defaultPath: DEFAULT_JSON_PATH,
+        properties: ['openDirectory'],
+      });
+      if (res !== -1) {
+        Editor.info(res);
+        var dir = res[0];
+        this.$json_file_input.value = dir;
+      }
+    });
+    this.$export_level_btn.addEventListener('confirm', () => {
+      const lan = this.$language.value;
+      const pf = this.$platform.value;
+      const prefabCount = this.$prefab_count.value;
+      const sortCount = this.$sort_count.value;
+      Editor.info(`export => lan = ${lan}, pf = ${pf}, prefabCount = ${prefabCount}, sortCount = ${sortCount}`);
+      task.updateLevelSort(lan, pf, prefabCount, sortCount, this.$excel_file_input.value, this.$json_file_input.value);
+    });
+
   },
 
   // register your ipc messages here
