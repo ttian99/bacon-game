@@ -37,10 +37,12 @@ Editor.Panel.extend({
         </ui-select>
       </ui-prop>
       <ui-prop name="原始关卡配置的数量" tooltips="" class="red">
-        <ui-num-input id="prefab_count" step="1" placeholder="92" value="92"></ui-num-input>
+        <ui-num-input id="prefab_count" step="1" placeholder="92" value="92" disabled></ui-num-input>
+        <ui-checkbox id="prefab_count_checkbox" checked="true">自动读取数量</ui-checkbox>
       </ui-prop>
       <ui-prop name="实际关卡配置的数量" tooltips="" class="red">
-        <ui-num-input id="sort_count" step="1" placeholder="85" value="85"></ui-num-input>
+        <ui-num-input id="sort_count" step="1" placeholder="85" value="85" disabled></ui-num-input>
+        <ui-checkbox id="sort_count_checkbox" checked="true">自动读取数量</ui-checkbox>
       </ui-prop>
       <div style="margin-top: 20px; margin-bottom: 20px; text-align: center">
         <ui-label class="red">导出配置前请一定填写正确的数量</ui-label>
@@ -91,7 +93,9 @@ Editor.Panel.extend({
     language: '#language',
     platform: '#platform',
     prefab_count: '#prefab_count',
-    sort_count: '#sort_count'
+    sort_count: '#sort_count',
+    prefab_count_checkbox: '#prefab_count_checkbox',
+    sort_count_checkbox: '#sort_count_checkbox',
   },
 
   run(data) {
@@ -142,12 +146,17 @@ Editor.Panel.extend({
     this.$export_level_btn.addEventListener('confirm', () => {
       const lan = this.$language.value;
       const pf = this.$platform.value;
-      const prefabCount = this.$prefab_count.value;
-      const sortCount = this.$sort_count.value;
+      const prefabCount = !this.$prefab_count_checkbox.checked ? this.$prefab_count.value : undefined;
+      const sortCount = !this.$sort_count_checkbox.checked ? this.$sort_count.value : undefined;
       Editor.info(`export => lan = ${lan}, pf = ${pf}, prefabCount = ${prefabCount}, sortCount = ${sortCount}`);
-      task.updateLevelSort(lan, pf, prefabCount, sortCount, this.$excel_file_input.value, this.$json_file_input.value);
+      task.updateLevelSort(lan, pf, this.$excel_file_input.value, this.$json_file_input.value, prefabCount, sortCount);
     });
-
+    this.$sort_count_checkbox.addEventListener('change', (event) => {
+      this.$sort_count.disabled = !!this.$sort_count_checkbox.checked;
+    });
+    this.$prefab_count_checkbox.addEventListener('change', (event) => {
+      this.$prefab_count.disabled = !!this.$prefab_count_checkbox.checked;
+    });
   },
 
   // register your ipc messages here
