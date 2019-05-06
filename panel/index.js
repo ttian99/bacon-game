@@ -36,13 +36,15 @@ Editor.Panel.extend({
           <option value="en">英文</option>
         </ui-select>
       </ui-prop>
-      <ui-prop name="原始关卡配置的数量" tooltips="">
+      <ui-prop name="原始关卡配置的数量" tooltips="" class="red">
         <ui-num-input id="prefab_count" step="1" placeholder="92" value="92"></ui-num-input>
       </ui-prop>
-      <ui-prop name="实际关卡配置的数量" tooltips="">
+      <ui-prop name="实际关卡配置的数量" tooltips="" class="red">
         <ui-num-input id="sort_count" step="1" placeholder="85" value="85"></ui-num-input>
       </ui-prop>
       <div style="margin-top: 20px; margin-bottom: 20px; text-align: center">
+        <ui-label class="red">导出配置前请一定填写正确的数量</ui-label>
+        <br/>
         <ui-button id="export_level_btn" class="yellow">导出</ui-button>
       </div>
     </section>
@@ -111,7 +113,7 @@ Editor.Panel.extend({
     });
 
     const DEFAULT_EXCEL_PATH = path.join(Editor.Project.path, 'doc/配置表/小猪煎强关卡配置表编排顺序.xlsx');
-    const DEFAULT_JSON_PATH = path.join(Editor.Project.path, 'doc/配置表');
+    const DEFAULT_JSON_PATH = path.join(Editor.Project.path, 'doc/配置表/cn');
     this.$excel_file_input.value = DEFAULT_EXCEL_PATH;
     this.$json_file_input.value = DEFAULT_JSON_PATH;
     this.$excel_file_btn.addEventListener('confirm', () => {
