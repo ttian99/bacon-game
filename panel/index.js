@@ -143,6 +143,10 @@ Editor.Panel.extend({
         this.$json_file_input.value = dir;
       }
     });
+
+    // this.$language.addEventListener('change', () => {
+    //   // Editor.Info()
+    // });
     this.$export_level_btn.addEventListener('confirm', () => {
       const lan = this.$language.value;
       const pf = this.$platform.value;
