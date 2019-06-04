@@ -23,17 +23,14 @@ Editor.Panel.extend({
         <ui-input id="json_file_input" style="width: 300px"></ui-input>
         <ui-button id="json_file_btn" class="green">选择目录</ui-button>      
       </ui-prop>
+      <ui-prop name="是否为审核版本">
+        <ui-checkbox id="is_sh"></ui-checkbox>
+      </ui-prop>
       <ui-prop name="选择平台">
         <ui-select id="platform" value="wx">
           <option value="wx">微信</option>
           <option value="tt">头条</option>
           <option value="fb">facebook</option>
-        </ui-select>
-      </ui-prop>
-      <ui-prop name="选择语言">
-        <ui-select id="language" value="cn">
-          <option value="cn">中文</option>
-          <option value="en">英文</option>
         </ui-select>
       </ui-prop>
       <ui-prop name="原始关卡配置的数量" tooltips="" class="red">
@@ -47,7 +44,7 @@ Editor.Panel.extend({
       <div style="margin-top: 20px; margin-bottom: 20px; text-align: center">
         <ui-label class="red">导出配置前请一定填写正确的数量</ui-label>
         <br/>
-        <ui-button id="export_level_btn" class="yellow">导出</ui-button>
+        <ui-button id="export_level_btn" class="blue">导出</ui-button>
       </div>
     </section>
     <hr />
@@ -80,6 +77,7 @@ Editor.Panel.extend({
 
   // element and variable binding
   $: {
+    is_sh: '#is_sh',
     fb_import_btn: '#fb_import_btn',
     fb_copy_debug_btn: '#fb_copy_debug_btn',
     tt_auto_copy: '#tt_auto_copy',
@@ -90,7 +88,6 @@ Editor.Panel.extend({
     json_file_btn: '#json_file_btn',
     json_file_input: '#json_file_input',
     export_level_btn: '#export_level_btn',
-    language: '#language',
     platform: '#platform',
     prefab_count: '#prefab_count',
     sort_count: '#sort_count',
@@ -143,13 +140,17 @@ Editor.Panel.extend({
         this.$json_file_input.value = dir;
       }
     });
+
+    // this.$language.addEventListener('change', () => {
+    //   // Editor.Info()
+    // });
     this.$export_level_btn.addEventListener('confirm', () => {
-      const lan = this.$language.value;
       const pf = this.$platform.value;
       const prefabCount = !this.$prefab_count_checkbox.checked ? this.$prefab_count.value : undefined;
       const sortCount = !this.$sort_count_checkbox.checked ? this.$sort_count.value : undefined;
-      Editor.info(`export => lan = ${lan}, pf = ${pf}, prefabCount = ${prefabCount}, sortCount = ${sortCount}`);
-      task.updateLevelSort(lan, pf, this.$excel_file_input.value, this.$json_file_input.value, prefabCount, sortCount);
+      var isSH = this.$is_sh.checked;
+      Editor.info(`export => pf = ${pf}, prefabCount = ${prefabCount}, sortCount = ${sortCount}, isSH = ${isSH}`);
+      task.updateLevelSort(pf, this.$excel_file_input.value, this.$json_file_input.value, prefabCount, sortCount, isSH);
     });
     this.$sort_count_checkbox.addEventListener('change', (event) => {
       this.$sort_count.disabled = !!this.$sort_count_checkbox.checked;
