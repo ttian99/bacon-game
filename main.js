@@ -28,6 +28,9 @@ module.exports = {
     'install' () {
       task.install();
     },
+    'md5_map' () {
+      task.makeMD5Map('ttgame');
+    },
     'editor:build-finished'(event, arg) {
       Editor.Ipc.sendToMain('bacon-game:tt-copy-build');
     }
