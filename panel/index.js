@@ -1,5 +1,6 @@
 let task = require(Editor.url('packages://bacon-game/lib/task.js'));
 var path = require('path');
+let cfg = task.loadConfig();
 
 // panel/index.js, this filename needs to match the one registered in package.json
 Editor.Panel.extend({
@@ -108,9 +109,16 @@ Editor.Panel.extend({
     this.$fb_copy_debug_btn.addEventListener('confirm', () => {
       task.fbCopyDebug();
     });
+
+    this.$tt_auto_copy.checked = cfg.autoCopy;
+    this.$tt_appid.value = cfg.appid;    
     this.$tt_save_btn.addEventListener('confirm', () => {
-      Editor.info(`appid = ${this.$tt_appid.$input.value} autoCopy = ${this.$tt_auto_copy.checked}`);
-      Editor.info(`this.$import_file = ${this.$import_file.value}`);
+      const appid = this.$tt_appid.$input.value;
+      const autoCopy = this.$tt_auto_copy.checked;
+      cfg.appid = appid;
+      cfg.autoCopy = autoCopy;
+      Editor.info(`appid = ${appid} autoCopy = ${autoCopy}`);
+      task.saveConfig(cfg);
     });
 
     const DEFAULT_EXCEL_PATH = path.join(Editor.Project.path, 'doc/配置表/小猪煎强关卡配置表编排顺序.xlsx');
@@ -141,9 +149,14 @@ Editor.Panel.extend({
       }
     });
 
-    // this.$language.addEventListener('change', () => {
-    //   // Editor.Info()
-    // });
+    this.$platform.addEventListener('change', (event) => {
+      Editor.info('选择了: ' + event.detail.text);
+      var pf = event.detail.value;
+      this.setExportPath(pf, this.$is_sh.checked);
+    });
+    this.$is_sh.addEventListener('change', (event) => {
+      this.setExportPath(this.$platform.value, this.$is_sh.value);
+    })
     this.$export_level_btn.addEventListener('confirm', () => {
       const pf = this.$platform.value;
       const prefabCount = !this.$prefab_count_checkbox.checked ? this.$prefab_count.value : undefined;
@@ -160,6 +173,12 @@ Editor.Panel.extend({
     });
   },
 
+  /** 设置输出文件 */
+  setExportPath(pf, isSH) {    
+    var preDir = isSH ? 'sh/' : '';
+    var outDir = path.join(Editor.Project.path, 'doc/配置表/' + preDir + pf);
+    this.$json_file_input.value = outDir;
+  },
   // register your ipc messages here
   messages: {
     'facebook-instant-game-debug:hello'(event) {

@@ -32,7 +32,10 @@ module.exports = {
       task.makeMD5Map('ttgame');
     },
     'editor:build-finished'(event, arg) {
-      Editor.Ipc.sendToMain('bacon-game:tt-copy-build');
+      const cfg = task.loadConfig();
+      if (cfg.autoCopy && arg.actualPlatform == 'wechatgame') {
+        Editor.Ipc.sendToMain('bacon-game:tt-copy-build');
+      }
     }
   },
 };
