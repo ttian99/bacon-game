@@ -1,4 +1,10 @@
 {
     "appid": "tt16f0604d89daa450", 
-    "autoCopy": true 
+    "autoCopy": true ,
+    "ttNavigateToMiniGameAppIdList": [
+        "ttfe32888f611848d5",
+        "ttfef4884961de4833",
+        "ttee31988c711b58d7",
+        "ttaaefdc5235c51a55"
+    ]
 }
