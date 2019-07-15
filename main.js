@@ -31,6 +31,9 @@ module.exports = {
     'md5_map' () {
       task.makeMD5Map('ttgame');
     },
+    'zipRes' () {
+      task.zipRes('ttgame')
+    },
     'editor:build-finished'(event, arg) {
       const cfg = task.loadConfig();
       if (cfg.autoCopy && arg.actualPlatform == 'wechatgame') {
