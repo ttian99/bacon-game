@@ -1,6 +1,6 @@
 {
   "name": "bacon-game",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The package template for getting started.",
   "author": "Monkey Jiao",
   "private": true,
@@ -26,6 +26,9 @@
     },
     "bacon-game/ttgame/压缩并且删除res目录": {
       "message": "bacon-game:zipRes"
+    },
+    "bacon-game/ttgame/上传res压缩包": {
+      "message": "bacon-game:uploadRes"
     }
   },
   "panel": {
@@ -41,6 +44,7 @@
     "glob": "^7.1.3",
     "moment": "^2.24.0",
     "node-zip-dir": "^1.0.2",
+    "ssh2-sftp-client": "^2.5.0",
     "xlsx": "^0.14.3"
   }
 }

@@ -34,6 +34,9 @@ module.exports = {
     'zipRes' () {
       task.zipRes('ttgame')
     },
+    'uploadRes' () {
+      task.uploadRes('ttgame');
+    },
     'editor:build-finished'(event, arg) {
       const cfg = task.loadConfig();
       if (cfg.autoCopy && arg.actualPlatform == 'wechatgame') {
